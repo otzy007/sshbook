@@ -1,0 +1,4 @@
+localhost:
+   user: 'user'
+   host: 'localhost'
+   options: '-Y'
