@@ -7,4 +7,4 @@ host = hosts[ARGV[0]]
 address = host['user'] + '@' + host['host']
 
 puts "Connecting to " + address
-exec("ssh #{host['options']} #{address}")
+exec("ssh #{host['options'] if host['options']} #{address}")
