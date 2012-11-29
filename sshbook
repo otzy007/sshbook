@@ -1,10 +1,15 @@
 #!/usr/bin/env ruby
-
 require 'yaml'
 
+# SSH address book ;)
 hosts = YAML.load(File.read(File.expand_path("~/.sshbook.yml")))
 host = hosts[ARGV[0]]
-address = host['user'] + '@' + host['host']
 
+if host['host']
+   address = host['user'] + '@' + host['host']
+elsif host['script']
+#    get the ip as a result of a script
+   address = eval host['script']
+end
 puts "Connecting to " + address
 exec("ssh #{host['options'] if host['options']} #{address}")
