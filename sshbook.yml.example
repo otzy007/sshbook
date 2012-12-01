@@ -1,7 +1,0 @@
-localhost:
-   user: 'user'
-   host: 'localhost'
-   options: '-Y'
-script-host:
-   user: 'user'
-   script: "require 'open-uri'; open('myreturn-ip.com').read"
