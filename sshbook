@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 ################################################################################
 #  The MIT License (MIT)
 # 
@@ -22,10 +24,15 @@
 # SOFTWARE.
 ################################################################################
 
-#!/usr/bin/env ruby
 require 'yaml'
 
 # SSH address book ;)
+
+if !ARGV[0]
+   puts "Usage: sshbook connection"
+   exit 1
+end
+
 hosts = YAML.load(File.read(File.expand_path("~/.sshbook.yml")))
 host = hosts[ARGV[0]]
 

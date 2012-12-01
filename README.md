@@ -1,10 +1,14 @@
 SSH address book
 ================
-Shortcuts for ssh connections
 
 This application reads it's configuration from the .sshbook.yml file located
 into the home directory(eg: /home/user/.sshbook.yml) and starts a ssh terminal.
 
+Usage
+=====
+```
+sshbook connection
+```
 
 .sshbook.yml configuration file
 ===============================

@@ -1,4 +1,4 @@
-localhost:
+connection:
    user: 'user'
    host: 'localhost'
    options: '-Y'
