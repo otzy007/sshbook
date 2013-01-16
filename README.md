@@ -7,7 +7,7 @@ into the home directory(eg: /home/user/.sshbook.yml) and starts a ssh terminal.
 Usage
 =====
 ```
-sshbook connection
+sshbook connection [command]
 ```
 
 .sshbook.yml configuration file

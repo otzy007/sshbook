@@ -35,7 +35,7 @@ def available_hosts
 end
 
 if !ARGV[0]
-   puts "Usage: sshbook connection\n\n"
+   puts "Usage: sshbook connection [command]\n\n"
    available_hosts
    exit 1
 end
@@ -56,4 +56,4 @@ elsif host['script']
    address = eval host['script']
 end
 puts "Connecting to " + address
-exec("ssh #{host['options'] if host['options']} #{address}")
+exec("ssh #{host['options'] if host['options']} #{address} #{ARGV[1]}")
