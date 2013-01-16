@@ -8,7 +8,6 @@ install:
   - echo -n "localhost " > ~/.ssh/known_hosts
   - cat /etc/ssh/ssh_host_ecdsa_key.pub >> ~/.ssh/known_hosts
   - cp test/.sshbook.yml ~
-  - sshbook localhost ls
 branches:
    only:
       - master
