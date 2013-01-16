@@ -24,17 +24,30 @@
 # SOFTWARE.
 ################################################################################
 
+# SSH address book ;)
 require 'yaml'
 
-# SSH address book ;)
+$HOSTS = YAML.load(File.read(File.expand_path("~/.sshbook.yml")))
+
+def available_hosts
+   puts "Available hosts"
+   $HOSTS.each {|host| puts "* " + host[0]}
+end
 
 if !ARGV[0]
-   puts "Usage: sshbook connection"
+   puts "Usage: sshbook connection\n\n"
+   available_hosts
    exit 1
 end
 
-hosts = YAML.load(File.read(File.expand_path("~/.sshbook.yml")))
-host = hosts[ARGV[0]]
+
+host = $HOSTS[ARGV[0]]
+
+if !host
+   puts "sshbook: No such host " +  ARGV[0] + "\n\n"
+   available_hosts
+   exit 1
+end
 
 if host['host']
    address = host['user'] + '@' + host['host']
