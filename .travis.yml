@@ -3,7 +3,7 @@ rvm:
   - 1.9.3
   - ruby-head
 install: 
-  - ssh-keygen -f ~/.ssh/id_rsa.pub -N ''
+  - ssh-keygen -f ~/.ssh/id_rsa -N ''
   - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
   - echo -n "localhost " > ~/.ssh/known_hosts
   - cat /etc/ssh/ssh_host_ecdsa_key.pub >> ~/.ssh/known_hosts
