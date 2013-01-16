@@ -5,6 +5,7 @@ namespace "travis" do
      desc "Test if it can connect"
    task :test_connection do
       puts "Testing the connection to localhost"
-      sh %{ruby sshbook localhost ls}
+      a = sh %{ruby sshbook localhost uname}
+      exit 1 if a != 'Linux'	 
    end
 end
