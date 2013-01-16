@@ -7,7 +7,8 @@ install:
   - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
   - echo -n "localhost " > ~/.ssh/known_hosts
   - cat /etc/ssh/ssh_host_ecdsa_key.pub >> ~/.ssh/known_hosts
-  - ssh localhost ls
+  - cp test/.sshbook.yml ~
+  - sshbook localhost ls
 branches:
    only:
       - master
