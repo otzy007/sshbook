@@ -2,4 +2,8 @@ language: ruby
 rvm:
   - 1.9.3
   - ruby-head
-install: ssh localhost
+install: 
+  - cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+  - echo -n "localhost " > ~/.ssh/known_hosts
+  - cat ssh_host_ecdsa_key.pub >> ~/.ssh/known_hosts
+  - ssh localhost ls
