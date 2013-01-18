@@ -25,11 +25,11 @@ describe Actions do
       end
       
       it 'adds a connection with a script and options' do
-	 ARGV = "-a -s script -o option name".split
+	 ARGV = "-a -s script -o option name user".split
 	 Actions.new.add
 	 $hosts['name'].should eq({'script' => 'script', 'options' => 'option'})
 	 
-	 ARGV = "-a -o option -s script name".split
+	 ARGV = "-a -o option -s script name user".split
 	 Actions.new.add
 	 $hosts['name'].should eq({'script' => 'script', 'options' => 'option'})
       end
