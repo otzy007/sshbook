@@ -9,7 +9,7 @@ Usage
 ```
 sshbook connection [command]
 ```
-
+See sshbook -h for more
 .sshbook.yml configuration file
 ===============================
 See [.sshbook.yml.example] (https://github.com/otzy007/sshbook/blob/master/.sshbook.yml.example) for a sample configuration.
