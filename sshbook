@@ -82,8 +82,8 @@ class Actions
 	 name = ARGV[i + 2]
 	 host = ARGV[i + 3]
       end
-      unless ((!script && ! options && ARGV.size == 3) || ((script && ! options) && ARGV.size == 4) ||
-	    ((!script && options) && ARGV.size == 5) || (script && options && ARGV.size == 6))
+      unless ((!script && ! options && ARGV.size == 3) || ((script && ! options) && ARGV.size == 5) ||
+	    ((!script && options) && ARGV.size == 5) || (script && options && ARGV.size == 7))
 	 puts "Usage: sshbook -a [-s script] [-o options] name [user@host]" 
 	 exit 0
       end
@@ -91,7 +91,7 @@ class Actions
       unless script
 	 $hosts[name] = {'user' => host.split('@')[0], 'host' => host.split('@')[1], 'options' => options}
       else
-	 $hosts[name] = {'script' => script, 'options' => options}
+	 $hosts[name] = {'user' => host, 'script' => script, 'options' => options}
       end
       save
    end
@@ -111,12 +111,15 @@ if $0 == __FILE__
       Actions.new.delete
    when '-a'
       Actions.new.add
+   when '-l'
+      available_hosts
    when '-h'
       puts "Usage: sshbook connection [command]\n\nOptions:\n"
       puts "-a [-o options] name user@host\t\tStore a connection for user@host by the name"
       puts "-a -s script [-o options] name user\tStore a connection with a script that will get the host"
       puts "-d connection\t\t\t\tDelete a connection"
       puts "-h\t\t\t\t\tPrint this help"
+      puts "-l\t\t\t\t\tList the connections"
    else
       host = $hosts[ARGV[0]]
 

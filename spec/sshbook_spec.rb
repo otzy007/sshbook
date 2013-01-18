@@ -19,19 +19,19 @@ describe Actions do
       end
       
       it 'adds a connection with a script' do
-	 ARGV = "-a -s script name".split
+	 ARGV = "-a -s script name user".split
 	 Actions.new.add
-	 $hosts['name'].should eq({'script' => 'script', 'options' => nil})
+	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => nil})
       end
       
       it 'adds a connection with a script and options' do
 	 ARGV = "-a -s script -o option name user".split
 	 Actions.new.add
-	 $hosts['name'].should eq({'script' => 'script', 'options' => 'option'})
+	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => 'option'})
 	 
 	 ARGV = "-a -o option -s script name user".split
 	 Actions.new.add
-	 $hosts['name'].should eq({'script' => 'script', 'options' => 'option'})
+	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => 'option'})
       end
       
       it 'shouldn\'t add  a connection without the host' do
