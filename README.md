@@ -10,6 +10,25 @@ Usage
 sshbook connection [command]
 ```
 See sshbook -h for more
+
+Examples
+========
+Execute ls on a stored connection
+```
+sshbook local ls
+```
+Add a connection named local to localhost with the X forwarding (-Y) option
+```
+sshbook -a -o -Y local user@localhost
+```
+Add a connection based on the hostname read from /etc/HOSTNAME
+```
+sshbook -a -s \"cat /etc/HOSTNAME\" local user
+```
+Delete the local connection
+```
+sshbook -d local
+```
 .sshbook.yml configuration file
 ===============================
 See [.sshbook.yml.example] (https://github.com/otzy007/sshbook/blob/master/.sshbook.yml.example) for a sample configuration.
