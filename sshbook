@@ -120,6 +120,11 @@ if $0 == __FILE__
       puts "-d connection\t\t\t\tDelete a connection"
       puts "-h\t\t\t\t\tPrint this help"
       puts "-l\t\t\t\t\tList the connections"
+      puts "\n\nExample:\n"
+      puts "sshbook local ls\t\t\t\tExecute ls on the local connection"
+      puts "sshbook -a -o -Y local user@localhost\t\tAdd a connection named local to localhost with the X forwarding (-Y) option"
+      puts "sshbook -a -s \"cat /etc/HOSTNAME\" local user\tAdd a connection based on the hostname read from /etc/HOSTNAME"
+      puts "sshbook -d local\t\t\t\tDelete the local connection"
    else
       host = $hosts[ARGV[0]]
 
