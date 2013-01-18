@@ -3,7 +3,7 @@
 ################################################################################
 #  The MIT License (MIT)
 # 
-# Copyright (c) 2012 Andrei Gliga
+# Copyright (c) 2012 - 2013 Andrei Gliga
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -27,33 +27,106 @@
 # SSH address book ;)
 require 'yaml'
 
-$HOSTS = YAML.load(File.read(File.expand_path("~/.sshbook.yml")))
+$HOSTS_FILE = "~/.sshbook.yml"
+
+HOSTS = YAML.load(File.read(File.expand_path($HOSTS_FILE)))
 
 def available_hosts
    puts "Available hosts"
-   $HOSTS.each {|host| puts "* " + host[0]}
+   HOSTS.each {|host| puts "* " + host[0]}
 end
 
-if !ARGV[0]
-   puts "Usage: sshbook connection [command]\n\n"
-   available_hosts
-   exit 1
+class Actions
+   # Delete a connection by it's name
+   def delete
+      unless ARGV[1]
+	 puts "Usage: sshbook -d name\n\n"
+	 available_hosts
+	 exit 1
+      end
+      if HOSTS.delete ARGV[1]
+	 save
+      else
+	 puts "No such host\n\n"
+	 available_hosts
+	 exit 1
+      end
+   end
+   
+   # Add a connection
+   def add
+       i = j = 0
+      script = options = host = nil
+      
+      # Check if there is a script to store
+      if i = ARGV.find_index('-s')
+	 script = ARGV[i + 1]
+      end
+   
+      # Check if there are any ssh options
+      if j = ARGV.find_index('-o')
+	 options = ARGV[j + 1]
+      end
+      
+      i = 0 unless i
+      j = 0 unless j
+      
+      # Get the host from the args
+      if j > i
+	 name = ARGV[j + 2]
+	 host = ARGV[j + 3]
+      elsif i == j
+	 name = ARGV[1]
+	 host = ARGV[2]
+      else
+	 name = ARGV[i + 2]
+	 host = ARGV[i + 3]
+      end
+      unless ((!script && ! options && ARGV.size == 3) || ((script && ! options) && ARGV.size == 4) ||
+	    ((!script && options) && ARGV.size == 5) || (script && options && ARGV.size == 6))
+	 puts "Usage: sshbook -a [-s script] [-o options] name [user@host]" 
+	 exit 0
+      end
+      
+      unless script
+	 HOSTS[name] = {'user' => host.split('@')[0], 'host' => host.split('@')[1], 'options' => options}
+      else
+	 HOSTS[name] = {'script' => script, 'options' => options}
+      end
+      save
+   end
+private
+   def save
+      File.write(File.expand_path($HOSTS_FILE), HOSTS.to_yaml)
+   end
 end
 
+if $0 == __FILE__
+   case ARGV[0]
+   when nil
+      puts "Usage: sshbook connection [command]\n\n"
+      available_hosts
+      exit 1
+   when '-d'
+      Actions.new.delete
+   when '-a'
+      Actions.new.add
+   else
+      host = HOSTS[ARGV[0]]
 
-host = $HOSTS[ARGV[0]]
+      if !host
+	 puts "sshbook: No such host " +  ARGV[0] + "\n\n"
+	 available_hosts
+	 exit 1
+      end
 
-if !host
-   puts "sshbook: No such host " +  ARGV[0] + "\n\n"
-   available_hosts
-   exit 1
+      if host['host']
+	 address = host['user'] + '@' + host['host']
+      elsif host['script']
+         # get the ip as a result of a script
+	 address = eval host['script']
+      end
+      puts "Connecting to " + address
+      exec("ssh #{host['options'] if host['options']} #{address} #{ARGV[1]}")
+   end
 end
-
-if host['host']
-   address = host['user'] + '@' + host['host']
-elsif host['script']
-#    get the ip as a result of a script
-   address = eval host['script']
-end
-puts "Connecting to " + address
-exec("ssh #{host['options'] if host['options']} #{address} #{ARGV[1]}")
