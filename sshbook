@@ -29,11 +29,11 @@ require 'yaml'
 
 $HOSTS_FILE = "~/.sshbook.yml"
 
-HOSTS = YAML.load(File.read(File.expand_path($HOSTS_FILE)))
+$hosts = YAML.load(File.read(File.expand_path($HOSTS_FILE)))
 
 def available_hosts
    puts "Available hosts"
-   HOSTS.each {|host| puts "* " + host[0]}
+   $hosts.each {|host| puts "* " + host[0]}
 end
 
 class Actions
@@ -44,7 +44,7 @@ class Actions
 	 available_hosts
 	 exit 1
       end
-      if HOSTS.delete ARGV[1]
+      if $hosts.delete ARGV[1]
 	 save
       else
 	 puts "No such host\n\n"
@@ -89,15 +89,15 @@ class Actions
       end
       
       unless script
-	 HOSTS[name] = {'user' => host.split('@')[0], 'host' => host.split('@')[1], 'options' => options}
+	 $hosts[name] = {'user' => host.split('@')[0], 'host' => host.split('@')[1], 'options' => options}
       else
-	 HOSTS[name] = {'script' => script, 'options' => options}
+	 $hosts[name] = {'script' => script, 'options' => options}
       end
       save
    end
 private
    def save
-      File.write(File.expand_path($HOSTS_FILE), HOSTS.to_yaml)
+      File.write(File.expand_path($HOSTS_FILE), $hosts.to_yaml)
    end
 end
 
@@ -112,7 +112,7 @@ if $0 == __FILE__
    when '-a'
       Actions.new.add
    else
-      host = HOSTS[ARGV[0]]
+      host = $hosts[ARGV[0]]
 
       if !host
 	 puts "sshbook: No such host " +  ARGV[0] + "\n\n"

@@ -9,29 +9,29 @@ describe Actions do
       it 'adds a simple connection' do
 	 ARGV = "-a name user@host".split
 	 Actions.new.add
-	 HOSTS['name'].should eq({'user' => 'user', 'host' => 'host', 'options' => nil})
+	 $hosts['name'].should eq({'user' => 'user', 'host' => 'host', 'options' => nil})
       end
       
       it 'adds a connection with options' do
 	 ARGV = "-a -o -Y name user@host".split
 	 Actions.new.add
-	 HOSTS['name'].should eq({'user' => 'user', 'host' => 'host', 'options' => '-Y'})
+	 $hosts['name'].should eq({'user' => 'user', 'host' => 'host', 'options' => '-Y'})
       end
       
       it 'adds a connection with a script' do
 	 ARGV = "-a -s script name".split
 	 Actions.new.add
-	 HOSTS['name'].should eq({'script' => 'script', 'options' => nil})
+	 $hosts['name'].should eq({'script' => 'script', 'options' => nil})
       end
       
       it 'adds a connection with a script and options' do
 	 ARGV = "-a -s script -o option name".split
 	 Actions.new.add
-	 HOSTS['name'].should eq({'script' => 'script', 'options' => 'option'})
+	 $hosts['name'].should eq({'script' => 'script', 'options' => 'option'})
 	 
 	 ARGV = "-a -o option -s script name".split
 	 Actions.new.add
-	 HOSTS['name'].should eq({'script' => 'script', 'options' => 'option'})
+	 $hosts['name'].should eq({'script' => 'script', 'options' => 'option'})
       end
       
       it 'shouldn\'t add  a connection without the host' do
@@ -45,11 +45,11 @@ describe Actions do
    end
    describe 'delete a connection' do
       it 'should delete a connection based on it\'s name' do
-# 	 HOSTS = Hash.new
-	 HOSTS['name'] = {'user' => 'user', 'host' => 'host', 'options' => '-Y'}
+# 	 $hosts = Hash.new
+	 $hosts['name'] = {'user' => 'user', 'host' => 'host', 'options' => '-Y'}
 	 ARGV = '-d name'.split
 	 Actions.new.delete
-	 HOSTS['name'].should eq nil
+	 $hosts['name'].should eq nil
       end
    end
 end
