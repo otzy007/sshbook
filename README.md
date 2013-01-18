@@ -23,7 +23,7 @@ sshbook -a -o -Y local user@localhost
 ```
 Add a connection based on the hostname read from /etc/HOSTNAME
 ```
-sshbook -a -s \"cat /etc/HOSTNAME\" local user
+sshbook -a -s "cat /etc/HOSTNAME" local user
 ```
 Delete the local connection
 ```
