@@ -97,7 +97,8 @@ class Actions
    end
 private
    def save
-      File.write(File.expand_path($HOSTS_FILE), $hosts.to_yaml)
+      file = File.open(File.expand_path($HOSTS_FILE), 'w')
+      file.write($hosts.to_yaml)
    end
 end
 
