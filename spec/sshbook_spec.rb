@@ -9,29 +9,29 @@ describe Actions do
       it 'adds a simple connection' do
 	 ARGV = "-a name user@host".split
 	 Actions.new.add
-	 $hosts['name'].should eq({'user' => 'user', 'host' => 'host', 'options' => nil})
+	 $hosts['name'].should eq({'user' => 'user', 'host' => 'host', 'options' => nil, 'command' => nil})
       end
       
       it 'adds a connection with options' do
 	 ARGV = "-a -o -Y name user@host".split
 	 Actions.new.add
-	 $hosts['name'].should eq({'user' => 'user', 'host' => 'host', 'options' => '-Y'})
+	 $hosts['name'].should eq({'user' => 'user', 'host' => 'host', 'options' => '-Y', 'command' => nil})
       end
       
       it 'adds a connection with a script' do
 	 ARGV = "-a -s script name user".split
 	 Actions.new.add
-	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => nil})
+	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => nil, 'command' => nil})
       end
       
       it 'adds a connection with a script and options' do
 	 ARGV = "-a -s script -o option name user".split
 	 Actions.new.add
-	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => 'option'})
+	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => 'option', 'command' => nil})
 	 
 	 ARGV = "-a -o option -s script name user".split
 	 Actions.new.add
-	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => 'option'})
+	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => 'option', 'command' => nil})
       end
       
       it 'shouldn\'t add  a connection without the host' do
@@ -50,7 +50,7 @@ describe Actions do
       end
       
       it 'should add a command to a scripted connection' do
-	 ARGV = '-a -c ls -o option -s script name'.split
+	 ARGV = '-a -c ls -o option -s script name user'.split
 	 Actions.new.add
 	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => 'option', 'command' => 'ls'})
       end
