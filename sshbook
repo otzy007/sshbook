@@ -139,7 +139,12 @@ if $0 == __FILE__
          # get the ip as a result of a script
 	 address = eval host['script']
       end
+      unless ARGV[1]
+	 command = host['command']
+      else
+	 command = ARGV[1]
+      end
       puts "Connecting to " + address
-      exec("ssh #{host['options'] if host['options']} #{address} #{ARGV[1]}")
+      exec("ssh #{host['options'] if host['options']} #{address} #{command}")
    end
 end
