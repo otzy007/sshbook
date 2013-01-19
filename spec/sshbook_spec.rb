@@ -55,6 +55,12 @@ describe Actions do
 	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => 'option', 'command' => 'ls'})
       end
       
+      it 'should add a connection only with the hostname' do
+	 ARGV = '-a name host'.split
+	 Actions.new.add
+	 $hosts['name'].should eq({'user' => ENV['user'], 'host' => 'host', 'options' => nil, 'command' => nil})
+      end
+      
    end
    describe 'delete a connection' do
       it 'should delete a connection based on it\'s name' do

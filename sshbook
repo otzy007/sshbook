@@ -85,8 +85,15 @@ class Actions
 	 exit 0
       end
       
+      # Verify if there's a user@host
+      if host.index('@')
+	 user = host.split('@')[0]
+	 host = host.split('@')[1]
+      else
+	 user = ENV['user']
+      end
       unless script
-	 $hosts[name] = {'user' => host.split('@')[0], 'host' => host.split('@')[1], 'options' => options, 'command' => command}
+	 $hosts[name] = {'user' => user, 'host' => host, 'options' => options, 'command' => command}
       else
 	 $hosts[name] = {'user' => host, 'script' => script, 'options' => options, 'command' => command}
       end
@@ -134,7 +141,9 @@ if $0 == __FILE__
       end
 
       if host['host']
-	 address = host['user'] + '@' + host['host']
+	 address = String.new
+	 address = host['user'] + '@' if host['user']
+	 address += host['host']
       elsif host['script']
          # get the ip as a result of a script
 	 address = eval host['script']
