@@ -42,6 +42,19 @@ describe Actions do
 	 end
 	 e.class.should eq SystemExit
       end
+      
+      it 'should add a connection with a command' do
+	 ARGV = '-a -c ls connection user@host'.split
+	 Actions.new.add
+	 $hosts['connection'].should eq({'user' => 'user', 'host' => 'host', 'options' => nil, 'command' => 'ls'})
+      end
+      
+      it 'should add a command to a scripted connection' do
+	 ARGV = '-a -c ls -o option -s script name'.split
+	 Actions.new.add
+	 $hosts['name'].should eq({'user' => 'user', 'script' => 'script', 'options' => 'option', 'command' => 'ls'})
+      end
+      
    end
    describe 'delete a connection' do
       it 'should delete a connection based on it\'s name' do
