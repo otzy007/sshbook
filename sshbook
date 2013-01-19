@@ -112,6 +112,9 @@ if $0 == __FILE__
       puts "Usage: sshbook connection [command]\nTry 'sshbook -h' for more information.\n\n"
       available_hosts
       exit 1
+   when '-v'
+      puts "sshbook 0.1\n\nCopyright (c) 2012 - 2013 Andrei Gliga\n"
+      puts "sshbook is licensed under the MIT License. See LICENSE.md for details."
    when '-d'
       Actions.new.delete
    when '-a'
@@ -122,14 +125,15 @@ if $0 == __FILE__
       puts "Usage: sshbook connection [command]\n\nOptions:\n"
       puts "-a [-o options] [-c command] name user@host\t\tStore a connection for user@host by the name"
       puts "-a -s script [-o options] [-c command] name user\tStore a connection with a script that will get the host"
-      puts "-d connection\t\t\t\tDelete a connection"
-      puts "-h\t\t\t\t\tPrint this help"
-      puts "-l\t\t\t\t\tList the connections"
+      puts "-d connection\t\t\t\t\t\tDelete a connection"
+      puts "-h\t\t\t\t\t\t\tPrint this help"
+      puts "-l\t\t\t\t\t\t\tList the connections"
+      puts "-v\t\t\t\t\t\t\tDisplay the version"
       puts "\n\nExample:\n"
       puts "sshbook local ls\t\t\t\tExecute ls on the local connection"
       puts "sshbook -a -o -Y local user@localhost\t\tAdd a connection named local to localhost with the X forwarding (-Y) option"
       puts "sshbook -a -s \"cat /etc/HOSTNAME\" local user\tAdd a connection based on the hostname read from /etc/HOSTNAME"
-      puts "sshbook -a -c ls local user@localhost Add a connection that executes ls"
+      puts "sshbook -a -c ls local user@localhost\t\tAdd a connection that executes ls"
       puts "sshbook -d local\t\t\t\tDelete the local connection"
    else
       host = $hosts[ARGV[0]]
