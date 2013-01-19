@@ -55,35 +55,32 @@ class Actions
    
    # Add a connection
    def add
-       i = j = 0
-      script = options = host = nil
+       size = 1
+      script = options = host = command = nil
       
       # Check if there is a script to store
       if i = ARGV.find_index('-s')
 	 script = ARGV[i + 1]
+	 size += 2
       end
    
       # Check if there are any ssh options
       if j = ARGV.find_index('-o')
 	 options = ARGV[j + 1]
+	 size += 2
       end
       
-      i = 0 unless i
-      j = 0 unless j
-      
-      # Get the host from the args
-      if j > i
-	 name = ARGV[j + 2]
-	 host = ARGV[j + 3]
-      elsif i == j
-	 name = ARGV[1]
-	 host = ARGV[2]
-      else
-	 name = ARGV[i + 2]
-	 host = ARGV[i + 3]
+      if k = ARGV.find_index('-c')
+	 command = ARGV[k + 1]
+	 size += 2
       end
-      unless ((!script && ! options && ARGV.size == 3) || ((script && ! options) && ARGV.size == 5) ||
-	    ((!script && options) && ARGV.size == 5) || (script && options && ARGV.size == 7))
+      
+      # Get the host and the connection name from the args
+      name = ARGV[size]
+      host = ARGV[size + 1]
+
+      size += 2
+      unless size == ARGV.size
 	 puts "Usage: sshbook -a [-s script] [-o options] name [user@host]" 
 	 exit 0
       end
