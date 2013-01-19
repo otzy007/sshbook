@@ -26,6 +26,10 @@ Add a connection based on the hostname read from /etc/HOSTNAME
 ```
 sshbook -a -s "cat /etc/HOSTNAME" local user
 ```
+Add a connection that executes ls
+```
+sshbook -a -c ls local user@localhost 
+```
 Delete the local connection
 ```
 sshbook -d local
