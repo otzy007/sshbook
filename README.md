@@ -1,5 +1,6 @@
 SSH address book
 ================
+[![Build Status](https://travis-ci.org/otzy007/storeip.png?branch=master)](undefined)
 
 This application reads it's configuration from the .sshbook.yml file located
 into the home directory(eg: /home/user/.sshbook.yml) and starts a ssh terminal.
