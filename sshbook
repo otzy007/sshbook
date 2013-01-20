@@ -157,7 +157,7 @@ if $0 == __FILE__
       else
 	 command = ARGV[1]
       end
-      puts "Connecting to " + address
+      puts "Connecting to " + address + " #{command}"
       exec("ssh #{host['options'] if host['options']} #{address} #{command}")
    end
 end
