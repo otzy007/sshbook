@@ -34,6 +34,11 @@ Delete the local connection
 ```
 sshbook -d local
 ```
+
+Install
+=======
+Just copy sshbook to /usr/bin and chmod a+x /usr/bin/sshbook
+
 .sshbook.yml configuration file
 ===============================
 See [.sshbook.yml.example] (https://github.com/otzy007/sshbook/blob/master/.sshbook.yml.example) for a sample configuration.
