@@ -2,6 +2,7 @@ connection:
    user: 'user'
    host: 'localhost'
    options: '-Y'
+   command: 'ls'
 script-host:
    user: 'user'
    script: "require 'open-uri'; open('myreturn-ip.com').read"
