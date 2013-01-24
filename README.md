@@ -22,9 +22,9 @@ Add a connection named local to localhost with the X forwarding (-Y) option
 ```
 sshbook -a -o -Y local user@localhost
 ```
-Add a connection based on the hostname read from /etc/HOSTNAME
+Add a connection based on the hostname got from the enviorment variable
 ```
-sshbook -a -s "cat /etc/HOSTNAME" local user
+sshbook -a -s ENV['HOSTNAME'] local user
 ```
 Add a connection that executes ls
 ```
