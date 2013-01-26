@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=0.1
+VERSION=0.1.2
 
 if [ -d /tmp/sshbook ]; then
    rm -r /tmp/sshbook
