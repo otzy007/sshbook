@@ -37,7 +37,7 @@ sshbook -d local
 
 Install
 =======
-Just copy sshbook to /usr/bin and chmod a+x /usr/bin/sshbook
+Just copy sshbook from the bin folder to /usr/bin and chmod a+x /usr/bin/sshbook
 
 .sshbook.yml configuration file
 ===============================

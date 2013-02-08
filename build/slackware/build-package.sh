@@ -11,7 +11,7 @@ mkdir -p $TEMPDIR/usr/bin
 mkdir $TEMPDIR/install
 mkdir -p $TEMPDIR/usr/share/doc/sshbook-$VERSION
 
-cp ../../sshbook $TEMPDIR/usr/bin
+cp ../../bin/sshbook $TEMPDIR/usr/bin
 cp slack-desc $TEMPDIR/install
 cp ../../README.md $TEMPDIR/usr/share/doc/sshbook-$VERSION
 cp ../../LICENSE.md $TEMPDIR/usr/share/doc/sshbook-$VERSION
