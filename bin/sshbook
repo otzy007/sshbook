@@ -99,10 +99,36 @@ class Actions
       end
       save
    end
+   
+   def transfer
+      if ARGV[1] && ARGV[2]
+      else
+	 puts "Usage sshbook -t [host]:file [host][:file]"
+	 exit 1
+      end
+      
+      exec("scp #{expand ARGV[1]} #{expand ARGV[2]}")
+   end
 private
    def save
       file = File.open(File.expand_path($HOSTS_FILE), 'w')
       file.write($hosts.to_yaml)
+   end
+   def expand(host_and_file)
+      if $hosts[host_and_file]
+	 host = $hosts[host_and_file]['user'] + '@'
+	 host += $hosts[host_and_file]['host'] || eval($hosts[host_and_file]['script'])
+	 host += ':~'
+	      
+      elsif $hosts[host_and_file.split(':')[0]]
+	 host = $hosts[host_and_file.split(':')[0]]['user'] + '@'
+	 host += $hosts[host_and_file.split(':')[0]]['host'] || eval($hosts[host_and_file.split(':')[0]]['script'])
+	 file = host_and_file.split(':')[1]
+	 
+	 host + ':' + file
+      else
+	 host_and_file
+      end
    end
 end
 
@@ -119,6 +145,8 @@ if $0 == __FILE__
       Actions.new.delete
    when '-a'
       Actions.new.add
+   when '-t'
+      Actions.new.transfer
    when '-l'
       available_hosts
    when '-h'
