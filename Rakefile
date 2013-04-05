@@ -8,6 +8,6 @@ namespace "travis" do
      desc "Test if it can connect"
    task :test_connection do
       puts "Testing the connection to localhost"
-      sh %{ruby sshbook localhost uname} 
+      sh %{ruby bin/sshbook localhost uname} 
    end
 end

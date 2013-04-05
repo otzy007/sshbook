@@ -94,7 +94,7 @@ class Actions
       end
       unless script
 	 $hosts[name] = {'user' => user, 'host' => host, 'options' => options, 'command' => command}
-      else
+      else travis:test_connection
 	 $hosts[name] = {'user' => host, 'script' => script, 'options' => options, 'command' => command}
       end
       save
@@ -107,7 +107,9 @@ class Actions
 	 exit 1
       end
       
+      puts "scp #{expand ARGV[1]} #{expand ARGV[2]}"
       exec("scp #{expand ARGV[1]} #{expand ARGV[2]}")
+      exit(0)
    end
 private
    def save
