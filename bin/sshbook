@@ -94,7 +94,7 @@ class Actions
       end
       unless script
 	 $hosts[name] = {'user' => user, 'host' => host, 'options' => options, 'command' => command}
-      else travis:test_connection
+      else
 	 $hosts[name] = {'user' => host, 'script' => script, 'options' => options, 'command' => command}
       end
       save
