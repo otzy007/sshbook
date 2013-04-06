@@ -4,7 +4,7 @@
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-$:.unshift File.join(File.dirname(__FILE__), *%w[..], "/bin")
+$:.unshift File.join(File.join(File.dirname(__FILE__), *%w[..]), 'bin')
 load 'sshbook'
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
