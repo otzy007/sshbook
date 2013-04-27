@@ -103,12 +103,12 @@ class Actions
    def transfer
       if ARGV[1] && ARGV[2]
       else
-	 puts "Usage sshbook -t [host]:file [host][:file]"
+	 puts "Usage sshbook -t [-r] [host]:file [host][:file]"
 	 exit 1
       end
       
-      puts "scp #{expand ARGV[1]} #{expand ARGV[2]}"
-      exec("scp #{expand ARGV[1]} #{expand ARGV[2]}")
+      puts "scp #{expand ARGV[1]} #{expand ARGV[2]} #{expand ARGV[3]}"
+      exec "scp #{expand ARGV[1]} #{expand ARGV[2]} #{expand ARGV[3]}"
       exit(0)
    end
 private
@@ -141,7 +141,7 @@ if $0 == __FILE__
       available_hosts
       exit 1
    when '-v'
-      puts "sshbook 0.3\n\nCopyright (c) 2012 - 2013 Andrei Gliga\n"
+      puts "sshbook 0.3.1\n\nCopyright (c) 2012 - 2013 Andrei Gliga\n"
       puts "sshbook is licensed under the MIT License. See LICENSE.md for details."
    when '-d'
       Actions.new.delete
@@ -158,6 +158,7 @@ if $0 == __FILE__
       puts "-d connection\t\t\t\t\t\tDelete a connection"
       puts "-h\t\t\t\t\t\t\tPrint this help"
       puts "-l\t\t\t\t\t\t\tList the connections"
+      puts "-t [-r]\t\t\t\t\t\t\tFile transfer"
       puts "-v\t\t\t\t\t\t\tDisplay the version"
       puts "\n\nExample:\n"
       puts "sshbook local ls\t\t\t\tExecute ls on the local connection"
@@ -165,6 +166,7 @@ if $0 == __FILE__
       puts "sshbook -a -s ENV['HOSTNAME'] local user\tAdd a connection based on the hostname got from the variable"
       puts "sshbook -a -c ls local user@localhost\t\tAdd a connection that executes ls"
       puts "sshbook -d local\t\t\t\tDelete the local connection"
+      puts "sshbook -t -r file host:dir\t\t\tTransfer a file to the hosts directory"
    else
       host = $hosts[ARGV[0]]
 
