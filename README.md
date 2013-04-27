@@ -34,6 +34,14 @@ Delete the local connection
 ```
 sshbook -d local
 ```
+Transfer a file
+```
+sshbook -t file host:/dest-dir
+```
+Transfer a folder to the users home
+```
+sshbook -t -r folder host
+```
 
 Install
 =======
