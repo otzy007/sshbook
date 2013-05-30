@@ -107,8 +107,8 @@ class Actions
 	 exit 1
       end
       
-      puts "scp #{expand ARGV[1]} #{expand ARGV[2]} #{expand ARGV[3]}"
-      exec "scp #{expand ARGV[1]} #{expand ARGV[2]} #{expand ARGV[3]}"
+      puts "scp #{expand ARGV[1]} #{expand ARGV[2]} #{expand ARGV[3] if ARGV[3]}"
+      exec "scp #{expand ARGV[1]} #{expand ARGV[2]} #{expand ARGV[3] if ARGV[3]}"
       exit(0)
    end
 private
