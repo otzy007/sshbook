@@ -1,7 +1,7 @@
 #!/bin/bash
 
-VERSION=0.1.2
-BUILD=2
+VERSION=0.3.2
+BUILD=1
 TEMPDIR=/tmp/sshbook-$VERSION
 if [ -d $TEMPDIR ]; then
    rm -rf $TEMPDIR
