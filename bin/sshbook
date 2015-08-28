@@ -76,15 +76,15 @@ class Actions
   end
 
   def transfer
-  if ARGV[0] && ARGV[1]
-  else
-    puts "Usage sshbook -t [-r] [host]:file [host][:file]"
-    exit 1
-  end
+    if ARGV[0] && ARGV[1]
+    else
+      puts "Usage sshbook -t [-r] [host]:file [host][:file]"
+      exit 1
+    end
 
-  puts "scp #{expand ARGV[0]} #{expand ARGV[1]} #{expand ARGV[2] if ARGV[2]}"
-  exec "scp #{expand ARGV[0]} #{expand ARGV[1]} #{expand ARGV[2] if ARGV[2]}"
-  exit(0)
+    puts "scp #{expand ARGV[0]} #{expand ARGV[1]} #{expand ARGV[2] if ARGV[2]}"
+    exec "scp #{expand ARGV[0]} #{expand ARGV[1]} #{expand ARGV[2] if ARGV[2]}"
+    exit(0)
   end
 
 private
