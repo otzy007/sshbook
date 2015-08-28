@@ -84,7 +84,6 @@ class Actions
 
     puts "scp #{expand ARGV[0]} #{expand ARGV[1]} #{expand ARGV[2] if ARGV[2]}"
     exec "scp #{expand ARGV[0]} #{expand ARGV[1]} #{expand ARGV[2] if ARGV[2]}"
-    exit(0)
   end
 
 private
