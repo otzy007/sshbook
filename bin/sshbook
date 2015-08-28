@@ -2,22 +2,22 @@
 
 ################################################################################
 #  The MIT License (MIT)
-# 
-# Copyright (c) 2012 - 2013 Andrei Gliga
-# 
+#
+# Copyright (c) 2012 - 2015 Andrei Gliga
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights 
+# in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is 
+# copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in 
+#
+# The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
@@ -26,6 +26,7 @@
 
 # SSH address book ;)
 require 'yaml'
+require 'optparse'
 
 $HOSTS_FILE = "~/.sshbook.yml"
 
@@ -37,78 +38,52 @@ def available_hosts
 end
 
 class Actions
-   # Delete a connection by it's name
-   def delete
-      unless ARGV[1]
-	 puts "Usage: sshbook -d name\n\n"
-	 available_hosts
-	 exit 1
-      end
-      if $hosts.delete ARGV[1]
-	 save
-      else
-	 puts "No such host\n\n"
-	 available_hosts
-	 exit 1
-      end
-   end
-   
-   # Add a connection
-   def add
-       size = 1
-      script = options = host = command = nil
-      
-      # Check if there is a script to store
-      if i = ARGV.find_index('-s')
-	 script = ARGV[i + 1]
-	 size += 2
-      end
-   
-      # Check if there are any ssh options
-      if j = ARGV.find_index('-o')
-	 options = ARGV[j + 1]
-	 size += 2
-      end
-      
-      if k = ARGV.find_index('-c')
-	 command = ARGV[k + 1]
-	 size += 2
-      end
-      
-      # Get the host and the connection name from the args
-      name = ARGV[size]
-      host = ARGV[size + 1]
-
-      size += 2
-      unless size == ARGV.size
-	 puts "Usage: sshbook -a [-s script] [-o options] name [user@host]" 
-	 exit 0
-      end
-      
-      # Verify if there's a user@host
-      if host.index('@')
-	 user = host.split('@')[0]
-	 host = host.split('@')[1]
-      else
-	 user = ENV['user']
-      end
-      unless script
-	 $hosts[name] = {'user' => user, 'host' => host, 'options' => options, 'command' => command}
-      else
-	 $hosts[name] = {'user' => host, 'script' => script, 'options' => options, 'command' => command}
-      end
+  # Delete a connection by it's name
+  def delete(server_alias)
+    if $hosts.delete server_alias
       save
-   end
-   
+    else
+      puts "No such host\n\n"
+      available_hosts
+      exit 1
+    end
+  end
+
+  def connect(s_alias, cmd)
+    p s_alias
+    p cmd
+    host = $hosts[s_alias]
+
+    if !host
+      puts "sshbook: No such host " +  s_alias + "\n\n"
+      available_hosts
+      exit 1
+    end
+
+    if host['host']
+      address = String.new
+      address = host['user'] + '@' if host['user']
+      address += host['host']
+    elsif host['script']
+      # get the ip as a result of a script
+      address = eval host['script']
+    end
+
+    command= cmd ? cmd : host['command']
+
+    puts "Connecting to " + address + " #{command}"
+    exec("ssh #{host['options'] if host['options']} #{address} #{command}")
+  end
+
    def transfer
-      if ARGV[1] && ARGV[2]
+      if ARGV[0] && ARGV[1]
       else
 	 puts "Usage sshbook -t [-r] [host]:file [host][:file]"
 	 exit 1
       end
-      
-      puts "scp #{expand ARGV[1]} #{expand ARGV[2]} #{expand ARGV[3] if ARGV[3]}"
-      exec "scp #{expand ARGV[1]} #{expand ARGV[2]} #{expand ARGV[3] if ARGV[3]}"
+
+      puts "scp #{expand ARGV[0]} #{expand ARGV[1]} #{expand ARGV[2] if ARGV[2]}"
+      exec "scp #{expand ARGV[0]} #{expand ARGV[1]} #{expand ARGV[2] if ARGV[2]}"
       exit(0)
    end
 private
@@ -121,12 +96,12 @@ private
 	 host = $hosts[host_and_file]['user'] + '@'
 	 host += $hosts[host_and_file]['host'] || eval($hosts[host_and_file]['script'])
 	 host += ':~'
-	      
+
       elsif $hosts[host_and_file.split(':')[0]]
 	 host = $hosts[host_and_file.split(':')[0]]['user'] + '@'
 	 host += $hosts[host_and_file.split(':')[0]]['host'] || eval($hosts[host_and_file.split(':')[0]]['script'])
 	 file = host_and_file.split(':')[1]
-	 
+
 	 host + ':' + file
       else
 	 host_and_file
@@ -135,61 +110,24 @@ private
 end
 
 if $0 == __FILE__
-   case ARGV[0]
-   when nil
-      puts "Usage: sshbook connection [command]\nTry 'sshbook -h' for more information.\n\n"
-      available_hosts
-      exit 1
-   when '-v'
-      puts "sshbook 0.3.2\n\nCopyright (c) 2012 - 2013 Andrei Gliga\n"
+  ARGV.options do |opts|
+    opts.on('-v', '--version', 'Show the version') do
+      puts "sshbook 0.3.2\n\nCopyright (c) 2012 - 2015 Andrei Gliga\n"
       puts "sshbook is licensed under the MIT License. See LICENSE.md for details."
-   when '-d'
-      Actions.new.delete
-   when '-a'
-      Actions.new.add
-   when '-t'
+      exit
+    end
+    opts.on('-l', '--list', 'List the servers') { available_hosts and exit }
+    opts.on('-d', '--delete ALIAS', String, 'Delete the server with the ALIAS') do |server_alias|
+      Actions.new.delete(server_alias)
+      exit
+    end
+    opts.on('-t', '--transfer') do
       Actions.new.transfer
-   when '-l'
-      available_hosts
-   when '-h'
-      puts "Usage: sshbook connection [command]\n\nOptions:\n"
-      puts "-a [-o options] [-c command] name user@host\t\tStore a connection for user@host by the name"
-      puts "-a -s script [-o options] [-c command] name user\tStore a connection with a ruby script that will get the host"
-      puts "-d connection\t\t\t\t\t\tDelete a connection"
-      puts "-h\t\t\t\t\t\t\tPrint this help"
-      puts "-l\t\t\t\t\t\t\tList the connections"
-      puts "-t [-r]\t\t\t\t\t\t\tFile transfer"
-      puts "-v\t\t\t\t\t\t\tDisplay the version"
-      puts "\n\nExample:\n"
-      puts "sshbook local ls\t\t\t\tExecute ls on the local connection"
-      puts "sshbook -a -o -Y local user@localhost\t\tAdd a connection named local to localhost with the X forwarding (-Y) option"
-      puts "sshbook -a -s ENV['HOSTNAME'] local user\tAdd a connection based on the hostname got from the variable"
-      puts "sshbook -a -c ls local user@localhost\t\tAdd a connection that executes ls"
-      puts "sshbook -d local\t\t\t\tDelete the local connection"
-      puts "sshbook -t -r file host:dir\t\t\tTransfer a file to the hosts directory"
-   else
-      host = $hosts[ARGV[0]]
+      exit
+    end
 
-      if !host
-	 puts "sshbook: No such host " +  ARGV[0] + "\n\n"
-	 available_hosts
-	 exit 1
-      end
+    opts.parse!
+  end
 
-      if host['host']
-	 address = String.new
-	 address = host['user'] + '@' if host['user']
-	 address += host['host']
-      elsif host['script']
-         # get the ip as a result of a script
-	 address = eval host['script']
-      end
-      unless ARGV[1]
-	 command = host['command']
-      else
-	 command = ARGV[1]
-      end
-      puts "Connecting to " + address + " #{command}"
-      exec("ssh #{host['options'] if host['options']} #{address} #{command}")
-   end
+  Actions.new.connect(ARGV[0], ARGV[1])
 end
