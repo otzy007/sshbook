@@ -71,6 +71,7 @@ if options[:script]
     save
   else
     puts "Usage: sshbook-add -s SCRIPT ALIAS"
+    exit 1
   end
 elsif host && user
   $hosts[s_alias][:host] = host
@@ -79,4 +80,5 @@ elsif host && user
   save
 else
   puts "Usage: sshbook-add [-s SCRIPT] [-o OPTIONS] ALIAS [USER@HOST]"
+  exit 1
 end
