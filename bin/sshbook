@@ -76,8 +76,7 @@ class Actions
   end
 
   def transfer
-    if ARGV[0] && ARGV[1]
-    else
+    unless ARGV[0] && ARGV[1]
       puts "Usage sshbook -t [-r] [host]:file [host][:file]"
       exit 1
     end
