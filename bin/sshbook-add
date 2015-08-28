@@ -1,0 +1,82 @@
+#!/usr/bin/env ruby
+
+################################################################################
+#  The MIT License (MIT)
+#
+# Copyright (c) 2012 - 2015 Andrei Gliga
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+################################################################################
+
+# SSH address book ;)
+require 'yaml'
+require 'optparse'
+
+$HOSTS_FILE = "~/.sshbook.yml"
+
+$hosts = YAML.load(File.read(File.expand_path($HOSTS_FILE)))
+
+def save
+   file = File.open(File.expand_path($HOSTS_FILE), 'w')
+   file.write($hosts.to_yaml)
+end
+
+options = {}
+
+ARGV.options do |opts|
+  opts.on('-s SCRIPT', '--script SCRIPT', String, 'Set the server credentials from a script') do |script|
+    options[:script] = script
+  end
+  opts.on('-o OPTIONS', '--options OPTIONS', String, 'Options for the ssh connection') do |o|
+    options[:options] = o
+  end
+  opts.on('-c COMMAND', '--command COMMAND', String, 'Command to be run with the alias') do |c|
+    options[:command] = c
+  end
+  opts.parse!
+end
+
+s_alias = ARGV[0]
+host = ARGV[1]
+
+# Verify if there's a user@host
+if host && host.index('@')
+  user = host.split('@')[0]
+  host = host.split('@')[1]
+else
+  user = `whoami`.tr("\n", '')
+end
+
+$hosts[s_alias] = { command: options[:command], options: options[:options] }
+
+if options[:script]
+  if s_alias
+    $hosts[s_alias][:script] = options[:script]
+    save
+  else
+    puts "Usage: sshbook-add -s SCRIPT ALIAS"
+  end
+elsif host && user
+  $hosts[s_alias][:host] = host
+  $hosts[s_alias][:user] = user
+
+  save
+else
+  puts "Usage: sshbook-add [-s SCRIPT] [-o OPTIONS] ALIAS [USER@HOST]"
+end
