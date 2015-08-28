@@ -54,7 +54,7 @@ class Actions
     p cmd
     host = $hosts[s_alias]
 
-    if !host
+    unless host
       puts "sshbook: No such host " +  s_alias + "\n\n"
       available_hosts
       exit 1
