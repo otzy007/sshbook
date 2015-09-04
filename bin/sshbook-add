@@ -63,19 +63,19 @@ else
   user = `whoami`.tr("\n", '')
 end
 
-$hosts[s_alias] = { command: options[:command], options: options[:options] }
+$hosts[s_alias] = { 'command' => options[:command], 'options' => options[:options] }
 
 if options[:script]
   if s_alias
-    $hosts[s_alias][:script] = options[:script]
+    $hosts[s_alias]['script'] = options[:script]
     save
   else
     puts "Usage: sshbook-add -s SCRIPT ALIAS"
     exit 1
   end
 elsif host && user
-  $hosts[s_alias][:host] = host
-  $hosts[s_alias][:user] = user
+  $hosts[s_alias]['host'] = host
+  $hosts[s_alias]['user'] = user
 
   save
 else
