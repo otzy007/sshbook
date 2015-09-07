@@ -109,6 +109,8 @@ private
 end
 
 if $0 == __FILE__
+  available_hosts and exit if ARGV.size == 0
+
   ARGV.options do |opts|
     opts.on('-v', '--version', 'Show the version') do
       puts "sshbook 0.3.2\n\nCopyright (c) 2012 - 2015 Andrei Gliga\n"
