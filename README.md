@@ -20,17 +20,17 @@ sshbook local ls
 ```
 Add a connection named local to localhost with the X forwarding (-Y) option
 ```
-sshbook -a -o -Y local user@localhost
+sshbook-add -o "-Y" local user@localhost
 ```
 Add a connection based on the hostname got from the enviorment variable
 ```
-sshbook -a -s ENV['HOSTNAME'] local user
+sshbook-add -s ENV['HOSTNAME'] local user
 ```
 Add a connection that executes ls
 ```
-sshbook -a -c ls local user@localhost 
+sshbook-add -c ls local user@localhost
 ```
-Delete the local connection
+Delete the "local" connection
 ```
 sshbook -d local
 ```
@@ -45,7 +45,7 @@ sshbook -t -r folder host
 
 Install
 =======
-Just copy sshbook from the bin folder to /usr/bin and chmod a+x /usr/bin/sshbook
+Just copy `sshbook` and `sshbook-add` from the bin folder to /usr/bin and `chmod a+x /usr/bin/sshbook`
 
 .sshbook.yml configuration file
 ===============================
