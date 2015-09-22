@@ -14,7 +14,7 @@ See sshbook -h for more
 
 Examples
 ========
-Execute ls on a stored connection
+Execute ls on an aliased connection
 ```
 sshbook local ls
 ```
@@ -26,7 +26,7 @@ Add a connection based on the hostname got from the enviorment variable
 ```
 sshbook-add -s ENV['HOSTNAME'] local user
 ```
-Add a connection that executes ls
+Add a connection that executes ls by default when connecting
 ```
 sshbook-add -c ls local user@localhost
 ```
