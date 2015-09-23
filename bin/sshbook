@@ -50,8 +50,6 @@ class Actions
   end
 
   def connect(s_alias, cmd)
-    p s_alias
-    p cmd
     host = $hosts[s_alias]
 
     unless host
