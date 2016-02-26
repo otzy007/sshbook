@@ -6,3 +6,5 @@ connection:
 script-host:
    user: 'user'
    script: "require 'open-uri'; open('myreturn-ip.com').read"
+alias_host:
+  alias: connection
