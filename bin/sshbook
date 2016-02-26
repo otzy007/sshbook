@@ -58,6 +58,8 @@ class Actions
       exit 1
     end
 
+    connect(host['alias'], cmd) && return if host['alias']
+
     if host['host']
       address = String.new
       address = host['user'] + '@' if host['user']
